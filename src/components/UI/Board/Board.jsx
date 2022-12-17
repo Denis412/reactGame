@@ -33,13 +33,12 @@ const Board = (props) => {
         setValues(newValues);
         setWinner(checkWin(newValues));
     }
-
     function checkWin(squares) {
         for(let i = 0; i < winnerLines.length; i++) {
             const [a, b, c] = winnerLines[i];
 
             if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                props.updateData(squares[a]);
+                props.updateWinner(squares[a]);
                 return squares[a];
             }
         }

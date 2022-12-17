@@ -2,7 +2,8 @@ import React from 'react';
 import Board from "./UI/Board/Board";
 import WinMessage from "./WinMessage/WinMessage";
 import classes from "./Game.module.css";
-import MyButton from "./UI/Button/MyButton";
+import RestartGameButton from "./UI/Button/RestartGameButton";
+import ScoreBoard from "./UI/ScoreBoard/ScoreBoard";
 
 class Game extends React.Component {
     constructor(props) {
@@ -10,10 +11,25 @@ class Game extends React.Component {
 
         this.state = {
             winner: null,
+            restart: false,
         }
     }
 
-    updateData = (value) => this.setState({winner: value});
+    renderBoard() {
+        return (
+            <Board
+                updateWinner={this.updateWinner}
+            />
+        );
+    }
+
+    updateWinner = (value) => this.setState({winner: value});
+    restartGame = () => {
+        this.setState({
+            winner: null,
+            restart: !this.state.restart
+        });
+    };
 
     render() {
         return (
@@ -23,11 +39,18 @@ class Game extends React.Component {
                 </header>
                 <main className={classes.gameMain}>
                     <div className={classes.leftSide}>
+                        <RestartGameButton
+                            onClick={this.restartGame}
+                        />
                     </div>
                     <div>
-                        <Board updateData={this.updateData}/>
+                        {this.state.restart ? this.restartGame() : this.renderBoard()}
                     </div>
-                    <div className={classes.rightSide}></div>
+                    <div
+                        className={classes.rightSide}
+                    >
+                        <ScoreBoard winner={this.state.winner}/>
+                    </div>
                 </main>
                 <footer>
 
