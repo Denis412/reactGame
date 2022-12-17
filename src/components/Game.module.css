@@ -1,0 +1,20 @@
+.gameContainer {
+
+}
+
+.gameHeader {
+    min-height: 15%;
+}
+
+.gameMain {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leftSide {
+    width: 25%;
+}
+
+.rightSide {
+    width: 25%;
+}

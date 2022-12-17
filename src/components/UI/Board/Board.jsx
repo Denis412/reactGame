@@ -10,9 +10,6 @@ const Board = (props) => {
         null, null, null,
         null, null, null,
     ]);
-
-    const [step, setStep] = useState(1);
-
     const winnerLines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -23,16 +20,17 @@ const Board = (props) => {
         [0, 4, 8],
         [2, 4, 6],
     ];
+
+    const [step, setStep] = useState(1);
     const [winner, setWinner] = useState(null);
 
-    function handlerClick(index) {
+    function handleClick(index) {
         let newValues = values.slice();
 
         newValues[index] = step % 2 === 0 ? 'O' : 'X';
+
         setStep(step + 1);
-
         setValues(newValues);
-
         setWinner(checkWin(newValues));
     }
 
@@ -41,6 +39,7 @@ const Board = (props) => {
             const [a, b, c] = winnerLines[i];
 
             if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                props.updateData(squares[a]);
                 return squares[a];
             }
         }
@@ -49,56 +48,64 @@ const Board = (props) => {
 
     return (
         <div className={classes.board}>
-            <WinMessage winner={winner} />
-
-            <h1 className={classes.header}>Текущий ход: {step % 2 === 0 ? 'O' : 'X'}</h1>
-            <div className={classes.row}>
+            <h1
+                className={classes.header}
+            >
+                Текущий ход: {step % 2 === 0 ? 'O' : 'X'}
+            </h1>
+            <div
+                className={classes.row}
+            >
                 <Square
-                    onClick={() => handlerClick(0)}
+                    onClick={() => handleClick(0)}
                     value={values[0]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(1)}
+                    onClick={() => handleClick(1)}
                     value={values[1]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(2)}
+                    onClick={() => handleClick(2)}
                     value={values[2]}
                     disabled={winner}
                 />
             </div>
-            <div className={classes.row}>
+            <div
+                className={classes.row}
+            >
                 <Square
-                    onClick={() => handlerClick(3)}
+                    onClick={() => handleClick(3)}
                     value={values[3]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(4)}
+                    onClick={() => handleClick(4)}
                     value={values[4]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(5)}
+                    onClick={() => handleClick(5)}
                     value={values[5]}
                     disabled={winner}
                 />
             </div>
-            <div className={classes.row}>
+            <div
+                className={classes.row}
+            >
                 <Square
-                    onClick={() => handlerClick(6)}
+                    onClick={() => handleClick(6)}
                     value={values[6]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(7)}
+                    onClick={() => handleClick(7)}
                     value={values[7]}
                     disabled={winner}
                 />
                 <Square
-                    onClick={() => handlerClick(8)}
+                    onClick={() => handleClick(8)}
                     value={values[8]}
                     disabled={winner}
                 />
