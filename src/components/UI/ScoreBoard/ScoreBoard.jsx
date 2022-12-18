@@ -7,7 +7,8 @@ const ScoreBoard = (props) => {
         if(props.winner) {
             let element = document.createElement('li');
             element.innerHTML = `<h3>Победитель: ${props.winner}</h3>`;
-            element.classList.add('scoreItem')
+            element.classList.add('scoreItem');
+
             document.querySelector('ol').appendChild(element);
         }
     }

@@ -22,5 +22,6 @@
 }
 
 .rightSide {
+    position: relative;
     width: 25%;
 }

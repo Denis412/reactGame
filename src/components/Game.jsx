@@ -2,8 +2,9 @@ import React from 'react';
 import Board from "./UI/Board/Board";
 import WinMessage from "./WinMessage/WinMessage";
 import classes from "./Game.module.css";
-import RestartGameButton from "./UI/Button/RestartGameButton";
+import RestartGameButton from "./UI/Buttons/RestartGameButton/RestartGameButton";
 import ScoreBoard from "./UI/ScoreBoard/ScoreBoard";
+import ClearScoreBoardButton from "./UI/Buttons/ClearScoreBoardButton/ClearScoreBoardButton";
 
 class Game extends React.Component {
     constructor(props) {
@@ -47,7 +48,7 @@ class Game extends React.Component {
                         />
                     </div
                     >
-                    <div
+                    <div id="mainGameZone"
                     >
                         {this.state.restart ? this.restartGame() : this.renderBoard()}
                     </div
@@ -56,6 +57,7 @@ class Game extends React.Component {
                         className={classes.rightSide}
                     >
                         <ScoreBoard winner={this.state.winner}/>
+                        <ClearScoreBoardButton />
                     </div>
                 </main>
             </div>
