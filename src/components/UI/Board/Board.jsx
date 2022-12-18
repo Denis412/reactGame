@@ -27,19 +27,26 @@ const Board = (props) => {
     function handleClick(index) {
         let newValues = values.slice();
 
-        newValues[index] = step % 2 === 0 ? 'O' : 'X';
+        newValues[index] = step % 2 === 0 ? 'О' : 'Х';
 
         setStep(step + 1);
         setValues(newValues);
-        setWinner(checkWin(newValues));
+
+        console.log(step)
+        if(step === 9)
+            setWinner('Ничья!');
+        else
+            setWinner(checkWin(newValues));
     }
     function checkWin(squares) {
         for(let i = 0; i < winnerLines.length; i++) {
             const [a, b, c] = winnerLines[i];
 
-            if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                props.updateWinner(squares[a]);
-                return squares[a];
+            if(squares[a]) {
+                if(squares[a] === squares[b] && squares[a] === squares[c]) {
+                    props.updateWinner(squares[a]);
+                    return squares[a];
+                }
             }
         }
         return null;
@@ -50,7 +57,7 @@ const Board = (props) => {
             <h1
                 className={classes.header}
             >
-                Текущий ход: {step % 2 === 0 ? 'O' : 'X'}
+                Текущий ход: {step % 2 === 0 ? 'О' : 'Х'}
             </h1>
             <div
                 className={classes.row}

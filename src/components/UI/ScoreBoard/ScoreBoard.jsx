@@ -1,22 +1,23 @@
 import React, {useState} from 'react';
 import classes from "./ScoreBoard.css";
-import ScoreList from "./ScoreList/ScoreList";
+import scoreList from "./ScoreList/ScoreList";
 
 const ScoreBoard = (props) => {
     function updateScoreBoard() {
         if(props.winner) {
             let element = document.createElement('li');
             element.innerHTML = `<h3>Победитель: ${props.winner}</h3>`;
-            document.querySelector('ul').appendChild(element);
+            element.classList.add('scoreItem')
+            document.querySelector('ol').appendChild(element);
         }
     }
 
     return (
         <div>
-            <h1>Таблица победителей:</h1>
-            <ul>
+            <h1>Доска победителей:</h1>
+            <ol>
                 {updateScoreBoard()}
-            </ul>
+            </ol>
         </div>
     );
 };

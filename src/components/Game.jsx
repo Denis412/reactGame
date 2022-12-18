@@ -34,27 +34,30 @@ class Game extends React.Component {
     render() {
         return (
             <div className={classes.gameContainer}>
-                <header className={classes.gameHeader}>
+                <header
+                    className={classes.gameHeader}
+                >
                     <WinMessage winner={this.state.winner}/>
                 </header>
                 <main className={classes.gameMain}>
-                    <div className={classes.leftSide}>
+                    <div
+                        className={classes.leftSide}>
                         <RestartGameButton
                             onClick={this.restartGame}
                         />
-                    </div>
-                    <div>
+                    </div
+                    >
+                    <div
+                    >
                         {this.state.restart ? this.restartGame() : this.renderBoard()}
-                    </div>
+                    </div
+                    >
                     <div
                         className={classes.rightSide}
                     >
                         <ScoreBoard winner={this.state.winner}/>
                     </div>
                 </main>
-                <footer>
-
-                </footer>
             </div>
         )
     }
