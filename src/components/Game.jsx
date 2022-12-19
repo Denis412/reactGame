@@ -5,14 +5,17 @@ import classes from "./Game.module.css";
 import RestartGameButton from "./UI/Buttons/RestartGameButton/RestartGameButton";
 import ScoreBoard from "./UI/ScoreBoard/ScoreBoard";
 import ClearScoreBoardButton from "./UI/Buttons/ClearScoreBoardButton/ClearScoreBoardButton";
+import {buildTimeValue} from "@testing-library/user-event/dist/utils";
 
 class Game extends React.Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
             winner: null,
             restart: false,
+            winners: [],
         }
     }
 
@@ -23,14 +26,23 @@ class Game extends React.Component {
             />
         );
     }
+    updateWinner = (value) => {
+        const newWinners = [];
 
-    updateWinner = (value) => this.setState({winner: value});
-    restartGame = () => {
+        for(let i = 0; i < this.state.winners.length; i++) {
+            newWinners[i] = Object.assign({}, this.state.winners[i]);
+        }
+
+        newWinners[newWinners.length] = {
+            name: value,
+            id: newWinners.length + 1
+        };
+
         this.setState({
-            winner: null,
-            restart: !this.state.restart
+            winner: value,
+            winners: newWinners,
         });
-    };
+    }
 
     render() {
         return (
@@ -42,21 +54,18 @@ class Game extends React.Component {
                 </header>
                 <main className={classes.gameMain}>
                     <div
-                        className={classes.leftSide}>
-                        <RestartGameButton
-                            onClick={this.restartGame}
-                        />
-                    </div
+                        className={classes.leftSide}
                     >
-                    <div id="mainGameZone"
+                        <RestartGameButton onClick={() => {}}/>
+                    </div>
+                    <div
                     >
-                        {this.state.restart ? this.restartGame() : this.renderBoard()}
-                    </div
-                    >
+                        {this.renderBoard()}
+                    </div>
                     <div
                         className={classes.rightSide}
                     >
-                        <ScoreBoard winner={this.state.winner}/>
+                        <ScoreBoard scoreList={this.state.winners}/>
                         <ClearScoreBoardButton />
                     </div>
                 </main>

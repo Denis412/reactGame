@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Square from "../Square/Square";
-import WinMessage from "../../WinMessage/WinMessage";
 
 import classes from "./board.module.css";
 
@@ -29,14 +28,15 @@ const Board = (props) => {
         for(let i = 0; i < values.length; i++)
             newValues[i] = Object.assign({}, values[i]);
 
+        setStep(step + 1);
+
         newValues[index].value = (step % 2 === 0 ? 'О' : 'Х');
         newValues[index].disable = true;
-
-        setStep(step + 1);
 
         let findWinner = checkWin(newValues);
 
         if(findWinner) {
+            setStep(1);
             for (let i = 0; i < newValues.length; i++) {
                 newValues[i].disable = true;
             }
