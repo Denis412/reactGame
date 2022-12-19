@@ -1,60 +1,47 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Board from "./UI/Board/Board";
 import WinMessage from "./WinMessage/WinMessage";
 import classes from "./Game.module.css";
 import RestartGameButton from "./UI/Buttons/RestartGameButton/RestartGameButton";
 import ScoreBoard from "./UI/ScoreBoard/ScoreBoard";
 import ClearScoreBoardButton from "./UI/Buttons/ClearScoreBoardButton/ClearScoreBoardButton";
-import {buildTimeValue} from "@testing-library/user-event/dist/utils";
-import clearScoreBoardButton from "./UI/Buttons/ClearScoreBoardButton/ClearScoreBoardButton";
 
-class Game extends React.Component {
+const Game = () => {
+    const [winner, setWinner] = useState(null);
+    const [values, setValues] = useState([
+        {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+        {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+        {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+    ]);
+    const [winnersNames, setWinnersNames] = useState(JSON.parse(localStorage.getItem("winners")) ?? []);
+    const [winnersValues, setWinnersValues] = useState(JSON.parse(localStorage.getItem("values")) ?? []);
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            winner: null,
-            values: [
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-            ],
-            winners: JSON.parse(localStorage.getItem("winners")) ?? [],
-        }
-    }
-    updateWinner = (value) => {
-        const newWinners = [];
-
-        for(let i = 0; i < this.state.winners.length; i++) {
-            newWinners[i] = Object.assign({}, this.state.winners[i]);
-        }
-
-        newWinners[newWinners.length] = {
+    const updateWinner = (value) => {
+        const newWinner = {
             name: value,
-            id: newWinners.length + 1
+            id: winnersNames.length + 1,
         };
 
-        localStorage.setItem("winners", JSON.stringify(newWinners));
 
-        this.setState({
-            winner: value,
-            winners: newWinners,
-        });
+        localStorage.setItem("winners", JSON.stringify([
+            ...(JSON.parse(localStorage.getItem("winners")) ?? []),
+            newWinner
+        ]));
+
+        setWinner(value);
+        setWinnersNames([...winnersNames, newWinner]);
     }
-    updateValues = (value, index, checkWin) => {
+    const updateValues = (value, index, checkWin) => {
         let newValues = [];
 
-        for(let i = 0; i < this.state.values.length; i++) {
-            newValues[i] = Object.assign({}, this.state.values[i]);
+        for(let i = 0; i < values.length; i++) {
+            newValues[i] = Object.assign({}, values[i]);
         }
 
         newValues[index].value = value;
         newValues[index].disable = true;
 
-        this.setState({
-            values: newValues,
-        });
+        setValues(newValues);
 
         let findWinner = checkWin(newValues);
 
@@ -62,55 +49,62 @@ class Game extends React.Component {
             for(let i = 0; i < newValues.length; i++) {
                 newValues[i].disable = true;
             }
+            setWinnersValues(newValues);
+
+            localStorage.setItem("values", JSON.stringify([
+                ...(JSON.parse(localStorage.getItem("values")) ?? []),
+                newValues
+            ]));
         }
 
         return findWinner
     }
-    restartGame() {
-        this.setState({
-            winner: null,
-            values: [
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-                {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
-            ],
-        });
+    const restartGame = () => {
+        setWinner(null);
+        setValues([
+            {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+            {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+            {value: null, disable: false}, {value: null, disable: false}, {value: null, disable: false},
+        ]);
     }
-    clearScoreBoard() {
-        this.setState({
-            winners: [],
-        });
+    const loadValues = (index) => {
+        setValues(
+            JSON.parse(localStorage.getItem("values"))[index],
+        );
+    }
+    const clearScoreBoard = () => {
+        setWinnersNames([]);
+        setWinnersValues([]);
 
         localStorage.removeItem("winners");
+        localStorage.removeItem("values");
     }
 
-    render() {
-        return (
-            <div className={classes.gameContainer}>
-                <header className={classes.gameHeader}>
-                    <WinMessage
-                        winner={this.state.winner}
+    return (
+        <div className={classes.gameContainer}>
+            <header className={classes.gameHeader}>
+                <WinMessage
+                    winner={winner}
+                />
+            </header>
+            <main className={classes.gameMain}>
+                <div className={classes.leftSide}>
+                    <RestartGameButton onClick={() => restartGame()}/>
+                </div>
+                <div>
+                    <Board
+                        values={values}
+                        updateValues={updateValues}
+                        updateWinner={updateWinner}
                     />
-                </header>
-                <main className={classes.gameMain}>
-                    <div className={classes.leftSide}>
-                        <RestartGameButton onClick={() => this.restartGame()}/>
-                    </div>
-                    <div>
-                        <Board
-                            values={this.state.values}
-                            updateValues={this.updateValues}
-                            updateWinner={this.updateWinner}
-                        />
-                    </div>
-                    <div className={classes.rightSide}>
-                        <ScoreBoard scoreList={this.state.winners}/>
-                        <ClearScoreBoardButton onClick={() => this.clearScoreBoard()}/>
-                    </div>
-                </main>
-            </div>
-        )
-    }
+                </div>
+                <div className={classes.rightSide}>
+                    <ScoreBoard loadValues={loadValues} scoreList={winnersNames}/>
+                    <ClearScoreBoardButton onClick={() => clearScoreBoard()}/>
+                </div>
+            </main>
+        </div>
+    )
 }
 
 export default Game;

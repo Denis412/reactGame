@@ -1,5 +1,9 @@
 .scoreItem {
     margin-left: 40px;
+
+    font-size: 20px;
+
+    cursor: pointer;
 }
 
 .scoreItem:first-child {

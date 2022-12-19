@@ -5,8 +5,13 @@ const ScoreBoard = (props) => {
     return (
         <div>
             <h1>Доска победителей:</h1>
-            {props.scoreList?.map(winner =>
-                <ScoreItem winner={winner} key={winner.id}/>
+            {props.scoreList?.map((winner, index) =>
+                <ScoreItem
+                    onClick={() => props.loadValues(index)}
+                    id={winner.id}
+                    name={winner.name}
+                    key={winner.id}
+                />
             )}
         </div>
     );
